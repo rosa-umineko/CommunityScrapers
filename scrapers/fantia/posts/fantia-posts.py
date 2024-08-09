@@ -1,4 +1,3 @@
-
 import json
 import sys
 import re
@@ -15,18 +14,15 @@ except ModuleNotFoundError:
     )
 
 def scrape(post_id):
-    log.info(f"Scraping product ID: {post_id}")
+    log.info(f"Scraping post ID: {post_id}")
     result = get_post(post_id)
 
-    # Error thrown here since /products or alternative endpoints dont exist
-    # TODO: scrape html instead with the cookie agent and token props properly
-
-    title = result['product']['title']
-    description = result['product']['comment']
-    cover = result['product']['thumb']['main']
+    title = result['post']['title']
+    description = result['post']['comment']
+    cover = result['post']['thumb']['main']
     tags = [{"name": tag['name']} for tag in result['post']['tags']]
-    date = datetime.strptime(result['product']['posted_at'], "%a, %d %b %Y %H:%M:%S %z").strftime("%Y-%m-%d")
-    studio = { "name": result['product']['fanclub']['user']['name'] }
+    date = datetime.strptime(result['post']['posted_at'], "%a, %d %b %Y %H:%M:%S %z").strftime("%Y-%m-%d")
+    studio = { "name": result['post']['fanclub']['user']['name'] }
 
     log.info("Parsed Result: ")
     log.info(f"Title: {title}")
@@ -40,13 +36,12 @@ def scrape(post_id):
         "title": title,
         "code": f"fantia-{post_id}",
         "details": description,
+        "url": f"https://fantia.jp/posts/{post_id}",
         "image": cover,
         "tags": tags,
         "date": date,
         "studio": studio
     }
-
-
 
 def main():
     if len(sys.argv) == 1:
@@ -62,7 +57,7 @@ def main():
         log.error(f"JSON decode error from stdin: {e}")
         sys.exit(1)
 
-    log.info(sys.argv)
+    log.info("Args" + str(sys.argv))
 
     scene = None
 
@@ -72,7 +67,7 @@ def main():
         url = inputJSON.get("url", None)
         
         if url:
-            pattern = r'https://fantia\.jp/products/(\d+)'
+            pattern = r'https://fantia\.jp/posts/(\d+)'
             match = re.search(pattern, url)
             if match:
                 post_id = match.group(1)
@@ -94,7 +89,7 @@ def main():
                 post_id = match.group(1)
                 scene = scrape(post_id)
             else:
-                log.error("Improper format")
+                log.error("Fragment scraping scene title but it doesn't include search term (fantia-<number> or fantia_<number>)")
         else:
             log.error("Missing title...")
     else:

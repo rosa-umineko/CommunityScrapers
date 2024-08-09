@@ -1,0 +1,19 @@
+name: dl-getchu
+
+sceneByURL:
+  - action: script
+    script:
+      - python
+      - dl-getchu.py
+      - scene-by-url
+    url:
+      - dl.getchu.com/i/
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - dl-getchu.py
+    - scene-by-fragment
+
+# Last Updated Aug 8, 2024

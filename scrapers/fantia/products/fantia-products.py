@@ -3,8 +3,6 @@ import sys
 import re
 from datetime import datetime
 
-from fetcher import get_post
-
 try:
     import stashapi.log as log
 except ModuleNotFoundError:
@@ -14,15 +12,20 @@ except ModuleNotFoundError:
     )
 
 def scrape(post_id):
-    log.info(f"Scraping post ID: {post_id}")
-    result = get_post(post_id)
+    log.info(f"Scraping product ID: {post_id}")
+    # result = get_post(post_id)
 
-    title = result['post']['title']
-    description = result['post']['comment']
-    cover = result['post']['thumb']['main']
+
+    # Error thrown here since /products or alternative endpoints dont exist
+    # TODO: scrape html instead with the cookie agent and token props properly
+    result = None
+
+    title = result['product']['title']
+    description = result['product']['comment']
+    cover = result['product']['thumb']['main']
     tags = [{"name": tag['name']} for tag in result['post']['tags']]
-    date = datetime.strptime(result['post']['posted_at'], "%a, %d %b %Y %H:%M:%S %z").strftime("%Y-%m-%d")
-    studio = { "name": result['post']['fanclub']['user']['name'] }
+    date = datetime.strptime(result['product']['posted_at'], "%a, %d %b %Y %H:%M:%S %z").strftime("%Y-%m-%d")
+    studio = { "name": result['product']['fanclub']['user']['name'] }
 
     log.info("Parsed Result: ")
     log.info(f"Title: {title}")
@@ -41,6 +44,8 @@ def scrape(post_id):
         "date": date,
         "studio": studio
     }
+
+
 
 def main():
     if len(sys.argv) == 1:
@@ -66,7 +71,7 @@ def main():
         url = inputJSON.get("url", None)
         
         if url:
-            pattern = r'https://fantia\.jp/posts/(\d+)'
+            pattern = r'https://fantia\.jp/products/(\d+)'
             match = re.search(pattern, url)
             if match:
                 post_id = match.group(1)
