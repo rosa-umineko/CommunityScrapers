@@ -1,0 +1,20 @@
+name: fantia (products)
+# Gets metadata from fantia.jp/products
+
+sceneByURL:
+  - action: script
+    script:
+      - python
+      - fantia-products.py
+      - scene-by-url
+    url:
+      - https://fantia.jp/products/
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - fantia-products.py
+    - scene-by-fragment
+
+# Last Updated Aug 8, 2024
