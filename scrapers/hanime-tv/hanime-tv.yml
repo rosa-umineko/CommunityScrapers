@@ -18,7 +18,6 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="tv-title"]/text()
-      Url: https://hanime.tv/videos/hentai/{filename}
       Date:
         selector: //div[@class="hvpimbc-item"]/div[contains(.,"Release Date")]/../div[@class="hvpimbc-text grey--text"]/text()
         postProcess:
