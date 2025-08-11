@@ -48,6 +48,12 @@ jobs:
         npm ci
         npm run ci-build
         cp -r site/* ../../_site/
+    - name: Copy stable index and scrapers to root
+      run: |
+        # Copy the stable index.yml to root for Stash compatibility
+        cp _site/stable/index.yml _site/index.yml
+        # Copy all stable scraper zip files to root
+        cp _site/stable/*.zip _site/
     - uses: actions/upload-pages-artifact@v3
       with:
         path: '_site'
