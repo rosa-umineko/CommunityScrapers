@@ -1,0 +1,21 @@
+name: FC2
+
+sceneByURL:
+  - action: script
+    script:
+      - python
+      - fc2ppv.py
+      - scene-by-url
+    url:
+      - adult.contents.fc2.com
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - fc2ppv.py
+    - scene-by-fragment
+
+# Custom FC2PPV scraper, main one --> https://github.com/stashapp/CommunityScrapers/blob/master/scrapers/fc2.yml
+
+# Last Updated Jan 14, 2025

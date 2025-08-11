@@ -1,8 +1,0 @@
-name: MilitaryClassified
-sceneByURL:
-  - action: script
-    script:
-      - python
-      - MilitaryClassified.py
-    url:
-      - militaryclassified.com/dt/classic/Movies/

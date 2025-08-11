@@ -1,0 +1,20 @@
+name: fantia (posts)
+# Gets metadata from fantia.jp/posts
+
+sceneByURL:
+  - action: script
+    script:
+      - python
+      - fantia-posts.py
+      - scene-by-url
+    url:
+      - https://fantia.jp/posts/
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - fantia-posts.py
+    - scene-by-fragment
+
+# Last Updated Aug 8, 2024
