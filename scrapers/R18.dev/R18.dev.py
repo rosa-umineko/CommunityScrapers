@@ -108,8 +108,27 @@ def scrape_scene(dvd_id, original_code=None):
     
     return scene_data
 
+def remove_extension(filename):
+    """remove common video file extensions from filename"""
+    # common video extensions
+    extensions = [
+        '.mp4', '.mkv', '.avi', '.mov', '.wmv', '.flv', '.webm',
+        '.m4v', '.mpg', '.mpeg', '.3gp', '.ts', '.m2ts'
+    ]
+    
+    # case-insensitive removal
+    filename_lower = filename.lower()
+    for ext in extensions:
+        if filename_lower.endswith(ext):
+            return filename[:-len(ext)]
+    
+    return filename
+
 def extract_dvd_id_from_filename(filename):
     """extract jav code from filename using regex"""
+    # first remove any file extensions
+    filename = remove_extension(filename)
+    
     # regex from original yaml
     pattern = r'.*?([a-zA-Z|tT28]+)-?(\d+)[zZ]?[eE]?(?:-pt)?(\d{1,2})?.*'
     match = re.search(pattern, filename)
@@ -165,12 +184,16 @@ def main():
         
         if original_code:
             log.info(f"Original code from fragment: {original_code}")
+            # remove extension from original code before storing
+            original_code_clean = remove_extension(original_code)
+            log.info(f"Code after extension removal: {original_code_clean}")
+            
             # extract regex'd version for API search
             dvd_id = extract_dvd_id_from_filename(original_code)
             if dvd_id:
                 log.info(f"Using regex'd DVD ID for search: {dvd_id}")
-                # pass both: regex'd for search, original for return
-                scene = scrape_scene(dvd_id, original_code=original_code)
+                # pass both: regex'd for search, cleaned original for return
+                scene = scrape_scene(dvd_id, original_code=original_code_clean)
             else:
                 log.error("Could not extract DVD ID from code using regex")
         else:
